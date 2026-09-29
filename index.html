@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angelica • Links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#d94f70; --accent-soft:#fbe3ea; --ink:#3a2b33; --muted:#a07e8b;
+    --page1:#fff8fa; --page2:#ffeef3; --page3:#ffe6ee;
+  }
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Outfit',system-ui,-apple-system,sans-serif;
+    background:linear-gradient(180deg,var(--page1),var(--page2) 55%,var(--page3));
+    min-height:100vh; color:var(--ink);
+    display:flex; justify-content:center;
+    padding:26px 16px 110px; box-sizing:border-box;
+  }
+  #page{width:100%;max-width:520px;text-align:center;position:relative;}
+  /* ---------- banner + avatar ---------- */
+  #banner{
+    height:168px;border-radius:26px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#f7b8cd,#f9dbe6 50%,#ddc9f5);
+    background-size:cover;background-position:center;
+    box-shadow:0 14px 32px rgba(217,79,112,.20);
+  }
+  .spark{position:absolute;color:#fff;opacity:.85;animation:tw 3.2s ease-in-out infinite;pointer-events:none;}
+  @keyframes tw{0%,100%{transform:scale(.7) rotate(0deg);opacity:.35;}50%{transform:scale(1.15) rotate(20deg);opacity:.95;}}
+  #avatarWrap{margin-top:-58px;position:relative;z-index:2;}
+  #avatar{
+    width:116px;height:116px;border-radius:50%;object-fit:cover;display:none;
+    border:5px solid #fff;box-shadow:0 10px 26px rgba(0,0,0,.18);background:#fff;
+  }
+  #avatarInitial{
+    width:116px;height:116px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+    border:5px solid #fff;box-shadow:0 10px 26px rgba(0,0,0,.18);
+    background:linear-gradient(135deg,var(--accent),#b76e79);
+    color:#fff;font-family:'Fraunces',serif;font-size:46px;font-weight:600;
+  }
+  h1#name{font-family:'Fraunces',serif;font-size:31px;margin:14px 0 4px;font-weight:600;letter-spacing:.2px;}
+  #bio{color:var(--muted);margin:0 0 20px;font-size:15px;padding:0 14px;line-height:1.5;}
+  /* ---------- social icon row ---------- */
+  #socialRow{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+  #socialRow:empty{display:none;}
+  .socBtn{
+    width:56px;height:56px;border-radius:50%;background:#fff;border:1px solid rgba(0,0,0,.05);
+    box-shadow:0 8px 18px rgba(0,0,0,.09);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:27px;overflow:hidden;transition:transform .15s;flex:none;
+  }
+  .socBtn:hover{transform:translateY(-3px) scale(1.05);}
+  .socBtn img{width:30px;height:30px;object-fit:contain;display:block;}
+  /* ---------- link cards ---------- */
+  #linkList{margin-top:2px;}
+  #linkList:empty{display:none;}
+  .linkCard{
+    display:flex;align-items:center;gap:14px;background:#fff;border-radius:20px;
+    padding:11px 16px 11px 11px;margin:0 0 12px;text-decoration:none;color:var(--ink);
+    box-shadow:0 8px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.04);
+    text-align:left;transition:transform .15s;
+  }
+  .linkCard:hover{transform:translateY(-2px);}
+  .linkIcon{
+    width:54px;height:54px;border-radius:17px;background:var(--accent-soft);flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:29px;overflow:hidden;
+  }
+  .linkIcon img{width:32px;height:32px;object-fit:contain;display:block;}
+  .linkText{flex:1;min-width:0;}
+  .linkTitle{font-weight:600;font-size:16.5px;line-height:1.3;}
+  .linkSub{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+  .linkGo{color:var(--accent);font-size:22px;flex:none;opacity:.85;}
+  #foot{margin-top:26px;color:var(--muted);font-size:12px;opacity:.8;}
+  /* ---------- edit fab + sheet ---------- */
+  #fab{
+    position:fixed;right:18px;bottom:18px;z-index:60;border:0;cursor:pointer;
+    background:var(--ink);color:#fff;border-radius:999px;padding:14px 22px;
+    font-size:15px;font-weight:600;font-family:inherit;box-shadow:0 12px 28px rgba(0,0,0,.28);
+  }
+  #fab:hover{transform:translateY(-2px);}
+  #scrim{position:fixed;inset:0;background:rgba(40,20,30,.35);opacity:0;pointer-events:none;transition:opacity .3s;z-index:70;}
+  #scrim.open{opacity:1;pointer-events:auto;}
+  #sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:80;max-height:88vh;
+    background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -14px 44px rgba(0,0,0,.22);
+    transform:translateY(105%);transition:transform .32s ease;display:flex;flex-direction:column;
+  }
+  #sheet.open{transform:none;}
+  #sheetHead{padding:14px 20px 0;display:flex;align-items:center;justify-content:space-between;}
+  #sheetHead h2{font-family:'Fraunces',serif;margin:0;font-size:22px;}
+  #closeSheet{border:0;background:#f3ecef;width:36px;height:36px;border-radius:50%;font-size:17px;cursor:pointer;color:var(--ink);}
+  #tabs{display:flex;gap:8px;padding:14px 20px 0;}
+  .tab{flex:1;border:0;border-radius:14px;padding:11px 0;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;background:#f6f0f3;color:var(--muted);}
+  .tab.on{background:var(--ink);color:#fff;}
+  #sheetBody{overflow-y:auto;padding:18px 20px 30px;}
+  .fld{margin-bottom:15px;text-align:left;}
+  .fld label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+  .fld input[type=text],.fld input[type=url],.fld select{
+    width:100%;box-sizing:border-box;border:1.5px solid #eadde2;border-radius:13px;
+    padding:11px 13px;font-size:15px;font-family:inherit;color:var(--ink);background:#fffdfd;
+  }
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);}
+  .rowBtns{display:flex;gap:8px;flex-wrap:wrap;}
+  .btn{border:0;border-radius:13px;padding:11px 16px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;}
+  .btn.primary{background:var(--accent);color:#fff;}
+  .btn.ghost{background:#f6f0f3;color:var(--ink);}
+  .btn.danger{background:#fde7ea;color:#c2334f;}
+  .gradRow{display:flex;gap:10px;margin-top:8px;}
+  .gradPick{width:52px;height:38px;border-radius:12px;border:2.5px solid transparent;cursor:pointer;padding:0;}
+  .gradPick.on{border-color:var(--ink);}
+  .themeRow{display:flex;gap:10px;flex-wrap:wrap;}
+  .themePick{display:flex;align-items:center;gap:8px;border:2px solid #eee;border-radius:14px;padding:9px 14px 9px 9px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;background:#fff;color:var(--ink);}
+  .themePick.on{border-color:var(--ink);}
+  .themeDot{width:30px;height:30px;border-radius:50%;flex:none;}
+  .lmItem{border:1.5px solid #f0e4e9;border-radius:16px;padding:12px;margin-bottom:10px;background:#fffdfd;}
+  .lmTop{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
+  .lmIconPrev{width:42px;height:42px;border-radius:13px;background:var(--accent-soft);flex:none;display:flex;align-items:center;justify-content:center;font-size:23px;overflow:hidden;}
+  .lmIconPrev img{width:26px;height:26px;object-fit:contain;}
+  .lmTitle{flex:1;min-width:0;}
+  .lmTitle input{width:100%;box-sizing:border-box;border:1.5px solid #eadde2;border-radius:10px;padding:8px 10px;font-size:14px;font-family:inherit;margin-bottom:6px;color:var(--ink);}
+  .lmRow{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+  .lmRow select{border:1.5px solid #eadde2;border-radius:10px;padding:7px 8px;font-size:13px;font-family:inherit;color:var(--ink);background:#fff;}
+  .lmRow input[type=text]{border:1.5px solid #eadde2;border-radius:10px;padding:7px 8px;font-size:13px;font-family:inherit;width:64px;color:var(--ink);}
+  .mini{border:0;background:#f6f0f3;border-radius:9px;padding:7px 10px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--ink);}
+  .mini:hover{background:#eadde4;}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  #previewBar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  #pvAva{width:46px;height:46px;border-radius:50%;object-fit:cover;display:none;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.15);}
+  #pvAvaI{width:46px;height:46px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'Fraunces',serif;font-size:20px;background:linear-gradient(135deg,var(--accent),#b76e79);}
+</style>
+</head>
+<body>
+<div id="page">
+  <div id="banner"></div>
+  <div id="avatarWrap">
+    <img id="avatar" alt="profile photo">
+    <span id="avatarInitial">A</span>
+  </div>
+  <h1 id="name">Angelica</h1>
+  <p id="bio">🌱 garden girl by day, vibe coder by night ✨</p>
+  <div id="socialRow"></div>
+  <div id="linkList"></div>
+  <div id="foot">made with ✨</div>
+</div>
+
+<button id="fab">✏️ Edit page</button>
+<div id="scrim"></div>
+<div id="sheet" role="dialog" aria-label="Edit page">
+  <div id="sheetHead">
+    <h2>Edit your page</h2>
+    <button id="closeSheet" title="Done">✕</button>
+  </div>
+  <div id="tabs">
+    <button class="tab on" data-tab="profile">Profile</button>
+    <button class="tab" data-tab="links">Links</button>
+    <button class="tab" data-tab="theme">Theme</button>
+  </div>
+  <div id="sheetBody">
+    <!-- PROFILE -->
+    <div id="tab-profile">
+      <div id="previewBar">
+        <img id="pvAva" alt=""><span id="pvAvaI">A</span>
+        <div style="text-align:left"><div id="pvName" style="font-weight:700">Angelica</div>
+        <div id="pvBio" style="font-size:12.5px;color:var(--muted)">🌱 garden girl by day, vibe coder by night ✨</div></div>
+      </div>
+      <div class="fld"><label>Your name</label><input type="text" id="fName" maxlength="60"></div>
+      <div class="fld"><label>Bio</label><input type="text" id="fBio" maxlength="140"></div>
+      <div class="fld"><label>Profile photo</label>
+        <div class="rowBtns">
+          <button class="btn ghost" id="avaUploadBtn">📷 Upload photo</button>
+          <button class="btn ghost" id="avaInitialBtn">✦ Use initial</button>
+        </div>
+        <input type="file" id="avaFile" accept="image/*" hidden>
+        <div style="margin-top:8px"><input type="url" id="fAvaUrl" placeholder="…or paste an image URL"></div>
+      </div>
+      <div class="fld"><label>Banner</label>
+        <div class="rowBtns"><button class="btn ghost" id="banUploadBtn">🖼️ Upload banner</button></div>
+        <input type="file" id="banFile" accept="image/*" hidden>
+        <div class="gradRow" id="gradRow"></div>
+        <div class="hint">Pick a pretty gradient or upload your own banner image.</div>
+      </div>
+    </div>
+    <!-- LINKS -->
+    <div id="tab-links" hidden>
+      <div id="linkMgr"></div>
+      <div class="lmItem" style="border-style:dashed">
+        <div class="fld" style="margin-bottom:9px"><label>Link title</label><input type="text" id="nTitle" placeholder="e.g. My Payhip shop"></div>
+        <div class="fld" style="margin-bottom:9px"><label>URL</label><input type="url" id="nUrl" placeholder="https://…"></div>
+        <div class="lmRow" style="margin-bottom:10px">
+          <select id="nStyle"><option value="card">Card style</option><option value="icon">Icon style</option></select>
+        </div>
+        <button class="btn primary" id="addLink" style="width:100%">＋ Add link</button>
+        <div class="hint">Icon style shows as a round button like your friend's. Card style shows as a full-width button. The icon is designed for you automatically ✨</div>
+      </div>
+    </div>
+    <!-- THEME -->
+    <div id="tab-theme" hidden>
+      <div class="fld"><label>Color theme</label><div class="themeRow" id="themeRow"></div></div>
+      <div class="fld"><label>Danger zone</label>
+        <button class="btn danger" id="resetAll">Reset page to defaults</button>
+      </div>
+      <div class="hint">Your edits save automatically in this browser. Tip: edit on the device you'll share from — each browser keeps its own copy.</div>
+    </div>
+  </div>
+</div>
+<script>
+/* ================= themes & data ================= */
+const THEMES = {
+  blush:   {label:'Blush',   accent:'#d94f70', soft:'#fbe3ea', ink:'#3a2b33', muted:'#a07e8b', p1:'#fff8fa', p2:'#ffeef3', p3:'#ffe6ee'},
+  sage:    {label:'Sage',    accent:'#5c8a4d', soft:'#e4efe0', ink:'#2e3a2a', muted:'#7d8a76', p1:'#f8faf5', p2:'#eef4e9', p3:'#e2ecdb'},
+  lavender:{label:'Lavender',accent:'#7b5fc7', soft:'#e9e1fa', ink:'#342b4a', muted:'#8b7fa8', p1:'#faf8ff', p2:'#f1ebfd', p3:'#e4d9fb'},
+  honey:   {label:'Honey',   accent:'#bd7d1e', soft:'#faead0', ink:'#3d2f1d', muted:'#a08a68', p1:'#fffdf6', p2:'#fdf3e0', p3:'#fae8c8'},
+  sky:     {label:'Sky',     accent:'#3f8fc4', soft:'#dceefb', ink:'#26333d', muted:'#7d94a3', p1:'#f7fcff', p2:'#ecf5fd', p3:'#dbedfa'}
+};
+const GRADS = [
+  'linear-gradient(135deg,#f7b8cd,#f9dbe6 50%,#ddc9f5)',
+  'linear-gradient(135deg,#a9c99b,#d9e8d2 50%,#f2e8c9)',
+  'linear-gradient(135deg,#f2c66d,#f9e2ae 50%,#f7b8a0)',
+  'linear-gradient(135deg,#9fd0f0,#cde9fa 50%,#e3d6fa)',
+  'linear-gradient(135deg,#3a2b33,#6b4a5a 55%,#c98aa0)',
+  'linear-gradient(135deg,#f9e2ae,#f7b8a0 50%,#f78fb3)'
+];
+const FALLBACK_ICON = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='#d94f70' d='M12 2l2.1 6.5L21 11l-6.9 2.5L12 20l-2.1-6.5L3 11l6.9-2.5z'/></svg>");
+
+const DEFAULTS = {
+  name:'Angelica',
+  bio:'🌱 garden girl by day, vibe coder by night ✨',
+  avatar:{type:'initial', value:''},
+  banner:{type:'gradient', value:0},
+  theme:'blush',
+  links:[
+    {id:'l1', title:'🌱 Seed Packet Studio', url:'https://misoprettystacks.github.io/Seed-Packet-Studio/', style:'card', icon:{mode:'emoji', value:'🌱'}},
+    {id:'l2', title:'@igotglitteronme on X', url:'https://x.com/igotglitteronme', style:'icon', icon:{mode:'auto', value:''}}
+  ]
+};
+
+/* ================= state ================= */
+const $ = id => document.getElementById(id);
+let S = load();
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem('glitterLinksV1')); if(s && Array.isArray(s.links)) return s; }
+  catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULTS));
+}
+function save(){ try{ localStorage.setItem('glitterLinksV1', JSON.stringify(S)); }catch(e){} }
+
+/* ================= icons: cute + automatic ================= */
+function hostOf(url){
+  try{ return new URL(url).hostname.replace(/^www\./,''); }catch(e){ return ''; }
+}
+function brandCandidates(url){
+  try{
+    const h = new URL(url).hostname.replace(/^www\./,'').toLowerCase();
+    const p = h.split('.');
+    let slug = p.length >= 2 ? p[p.length-2] : p[0];
+    if(slug === 'twitter') slug = 'x';
+    if(slug === 'youtu') slug = 'youtube';
+    return ['https://cdn.simpleicons.org/' + encodeURIComponent(slug),
+            'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(h) + '&sz=128'];
+  }catch(e){ return []; }
+}
+function setIcon(el, link){
+  el.textContent = '';
+  const ic = link.icon || {mode:'auto', value:''};
+  if(ic.mode === 'emoji' && ic.value){ el.textContent = ic.value; return; }
+  const im = document.createElement('img'); im.alt = '';
+  if(ic.mode === 'upload' && ic.value){
+    im.src = ic.value;
+    im.onerror = ()=>{ im.onerror = null; im.src = FALLBACK_ICON; };
+    el.appendChild(im); return;
+  }
+  const cands = brandCandidates(link.url);
+  const step = ()=>{
+    if(cands.length){ im.src = cands.shift(); }
+    else { im.onerror = null; im.src = FALLBACK_ICON; }
+  };
+  im.onerror = step;
+  el.appendChild(im);
+  step();
+}
+
+/* ================= render ================= */
+function drawSparkles(){
+  const b = $('banner');
+  b.querySelectorAll('.spark').forEach(s => s.remove());
+  if(S.banner.type === 'upload' && S.banner.value) return;
+  [[10,24,.9],[76,16,1.2],[58,66,.7],[28,72,1],[88,58,.8],[44,30,.6]].forEach((p,i)=>{
+    const s = document.createElement('span');
+    s.className = 'spark'; s.textContent = '✦';
+    s.style.left = p[0]+'%'; s.style.top = p[1]+'%';
+    s.style.fontSize = (9 + p[2]*9) + 'px';
+    s.style.animationDelay = (i*0.65) + 's';
+    b.appendChild(s);
+  });
+}
+function render(){
+  const t = THEMES[S.theme] || THEMES.blush;
+  const rs = document.documentElement.style;
+  rs.setProperty('--accent', t.accent); rs.setProperty('--accent-soft', t.soft);
+  rs.setProperty('--ink', t.ink); rs.setProperty('--muted', t.muted);
+  rs.setProperty('--page1', t.p1); rs.setProperty('--page2', t.p2); rs.setProperty('--page3', t.p3);
+  document.title = (S.name || 'Links') + ' • Links';
+
+  $('name').textContent = S.name || 'Your Name';
+  $('bio').textContent = S.bio || '';
+  $('pvName').textContent = S.name || 'Your Name';
+  $('pvBio').textContent = S.bio || '';
+
+  const b = $('banner');
+  if(S.banner.type === 'upload' && S.banner.value){
+    b.style.background = '#eee';
+    b.style.backgroundImage = 'url("' + S.banner.value.replace(/"/g,'') + '")';
+  } else {
+    b.style.backgroundImage = 'none';
+    b.style.background = GRADS[S.banner.value] || GRADS[0];
+  }
+  drawSparkles();
+
+  const av = $('avatar'), ai = $('avatarInitial');
+  const initial = ((S.name || 'A').trim().charAt(0) || 'A').toUpperCase();
+  const showImg = (S.avatar.type === 'upload' || S.avatar.type === 'url') && S.avatar.value;
+  av.style.display = showImg ? 'inline-block' : 'none';
+  ai.style.display = showImg ? 'none' : 'inline-flex';
+  if(showImg) av.src = S.avatar.value;
+  ai.textContent = initial;
+  const pvA = $('pvAva'), pvI = $('pvAvaI');
+  pvA.style.display = showImg ? 'inline-block' : 'none';
+  pvI.style.display = showImg ? 'none' : 'inline-flex';
+  if(showImg) pvA.src = S.avatar.value;
+  pvI.textContent = initial;
+
+  const sr = $('socialRow'); sr.innerHTML = '';
+  S.links.filter(l => l.style === 'icon').forEach(l => {
+    const a = document.createElement('a');
+    a.className = 'socBtn'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; a.title = l.title;
+    setIcon(a, l); sr.appendChild(a);
+  });
+  const ll = $('linkList'); ll.innerHTML = '';
+  S.links.filter(l => l.style !== 'icon').forEach(l => {
+    const a = document.createElement('a');
+    a.className = 'linkCard'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+    const ic = document.createElement('span'); ic.className = 'linkIcon'; setIcon(ic, l);
+    const tx = document.createElement('span'); tx.className = 'linkText';
+    const ti = document.createElement('div'); ti.className = 'linkTitle'; ti.textContent = l.title || hostOf(l.url);
+    const su = document.createElement('div'); su.className = 'linkSub'; su.textContent = hostOf(l.url);
+    tx.appendChild(ti); tx.appendChild(su);
+    const go = document.createElement('span'); go.className = 'linkGo'; go.textContent = '›';
+    a.appendChild(ic); a.appendChild(tx); a.appendChild(go);
+    ll.appendChild(a);
+  });
+}
+
+/* ================= image uploads ================= */
+function downscaleImage(file, maxSide){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{
+      let w = img.width, h = img.height;
+      const k = Math.min(1, maxSide / Math.max(w, h));
+      w = Math.round(w*k); h = Math.round(h*k);
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = rej;
+    img.src = url;
+  });
+}
+
+/* ================= editor ================= */
+function openSheet(){ $('sheet').classList.add('open'); $('scrim').classList.add('open'); syncForm(); }
+function closeSheet(){ $('sheet').classList.remove('open'); $('scrim').classList.remove('open'); }
+document.querySelectorAll('.tab').forEach(t => {
+  t.onclick = ()=>{
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    ['profile','links','theme'].forEach(k => { $('tab-'+k).hidden = (k !== t.dataset.tab); });
+  };
+});
+function syncForm(){
+  $('fName').value = S.name || '';
+  $('fBio').value = S.bio || '';
+  $('fAvaUrl').value = S.avatar.type === 'url' ? S.avatar.value : '';
+  document.querySelectorAll('#gradRow .gradPick').forEach((b,i) =>
+    b.classList.toggle('on', S.banner.type === 'gradient' && S.banner.value === i));
+  document.querySelectorAll('#themeRow .themePick').forEach(b =>
+    b.classList.toggle('on', b.dataset.theme === S.theme));
+  renderLinkMgr();
+}
+function miniBtn(t, fn){
+  const b = document.createElement('button');
+  b.className = 'mini'; b.textContent = t; b.onclick = fn; return b;
+}
+function moveLink(i, d){
+  const j = i + d;
+  if(j < 0 || j >= S.links.length) return;
+  const x = S.links.splice(i, 1)[0];
+  S.links.splice(j, 0, x);
+  save(); render(); renderLinkMgr();
+}
+function renderLinkMgr(){
+  const m = $('linkMgr'); m.innerHTML = '';
+  S.links.forEach((l, idx) => {
+    const d = document.createElement('div'); d.className = 'lmItem';
+    const top = document.createElement('div'); top.className = 'lmTop';
+    const prev = document.createElement('span'); prev.className = 'lmIconPrev'; setIcon(prev, l);
+    const tt = document.createElement('div'); tt.className = 'lmTitle';
+    const ti = document.createElement('input');
+    ti.type = 'text'; ti.value = l.title || ''; ti.placeholder = 'Title';
+    ti.oninput = ()=>{ l.title = ti.value; save(); render(); };
+    const ui = document.createElement('input');
+    ui.type = 'text'; ui.value = l.url || ''; ui.placeholder = 'https://…';
+    ui.onchange = ()=>{ l.url = ui.value.trim(); save(); render(); renderLinkMgr(); };
+    tt.appendChild(ti); tt.appendChild(ui);
+    top.appendChild(prev); top.appendChild(tt);
+    const row = document.createElement('div'); row.className = 'lmRow';
+    const st = document.createElement('select');
+    st.innerHTML = '<option value="card">Card</option><option value="icon">Icon</option>';
+    st.value = l.style === 'icon' ? 'icon' : 'card';
+    st.onchange = ()=>{ l.style = st.value; save(); render(); };
+    const md = document.createElement('select');
+    md.innerHTML = '<option value="auto">Auto icon</option><option value="emoji">Emoji</option><option value="upload">Upload</option>';
+    md.value = (l.icon && l.icon.mode) || 'auto';
+    md.onchange = ()=>{ l.icon = {mode: md.value, value:''}; save(); render(); renderLinkMgr(); };
+    row.appendChild(st); row.appendChild(md);
+    if(l.icon && l.icon.mode === 'emoji'){
+      const ei = document.createElement('input');
+      ei.type = 'text'; ei.placeholder = '🌸'; ei.value = l.icon.value || '';
+      ei.oninput = ()=>{ l.icon.value = ei.value; save(); render(); setIcon(prev, l); };
+      row.appendChild(ei);
+    }
+    if(l.icon && l.icon.mode === 'upload'){
+      const ub = miniBtn('Upload icon', ()=> fi.click());
+      const fi = document.createElement('input');
+      fi.type = 'file'; fi.accept = 'image/*'; fi.hidden = true;
+      fi.onchange = ()=>{
+        const f = fi.files[0];
+        if(f) downscaleImage(f, 256).then(durl => { l.icon.value = durl; save(); render(); renderLinkMgr(); });
+      };
+      row.appendChild(ub); row.appendChild(fi);
+    }
+    row.appendChild(miniBtn('↑', ()=>moveLink(idx,-1)));
+    row.appendChild(miniBtn('↓', ()=>moveLink(idx,1)));
+    row.appendChild(miniBtn('🗑', ()=>{
+      if(confirm('Delete "' + (l.title || 'this link') + '"?')){ S.links.splice(idx,1); save(); render(); renderLinkMgr(); }
+    }));
+    d.appendChild(top); d.appendChild(row);
+    m.appendChild(d);
+  });
+}
+
+/* ---- wire up ---- */
+$('fab').onclick = openSheet;
+$('closeSheet').onclick = closeSheet;
+$('scrim').onclick = closeSheet;
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSheet(); });
+
+$('fName').oninput = e => { S.name = e.target.value; save(); render(); };
+$('fBio').oninput = e => { S.bio = e.target.value; save(); render(); };
+$('avaUploadBtn').onclick = ()=> $('avaFile').click();
+$('avaFile').onchange = e => {
+  const f = e.target.files[0];
+  if(f) downscaleImage(f, 512).then(durl => { S.avatar = {type:'upload', value:durl}; save(); render(); syncForm(); });
+  e.target.value = '';
+};
+$('avaInitialBtn').onclick = ()=>{ S.avatar = {type:'initial', value:''}; save(); render(); syncForm(); };
+$('fAvaUrl').onchange = e => {
+  const v = e.target.value.trim();
+  S.avatar = v ? {type:'url', value:v} : {type:'initial', value:''};
+  save(); render(); syncForm();
+};
+$('banUploadBtn').onclick = ()=> $('banFile').click();
+$('banFile').onchange = e => {
+  const f = e.target.files[0];
+  if(f) downscaleImage(f, 1600).then(durl => { S.banner = {type:'upload', value:durl}; save(); render(); syncForm(); });
+  e.target.value = '';
+};
+GRADS.forEach((g, i) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'gradPick'; b.title = 'Banner ' + (i+1);
+  b.style.background = g;
+  b.onclick = ()=>{ S.banner = {type:'gradient', value:i}; save(); render(); syncForm(); };
+  $('gradRow').appendChild(b);
+});
+Object.keys(THEMES).forEach(key => {
+  const t = THEMES[key];
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'themePick'; b.dataset.theme = key;
+  const dot = document.createElement('span'); dot.className = 'themeDot';
+  dot.style.background = 'linear-gradient(135deg,' + t.accent + ',' + t.soft + ')';
+  b.appendChild(dot);
+  const lb = document.createElement('span'); lb.textContent = t.label; b.appendChild(lb);
+  b.onclick = ()=>{ S.theme = key; save(); render(); syncForm(); };
+  $('themeRow').appendChild(b);
+});
+$('addLink').onclick = ()=>{
+  let u = $('nUrl').value.trim();
+  if(!u){ alert('Add a URL first ✨'); return; }
+  if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  const title = $('nTitle').value.trim() || hostOf(u) || 'My link';
+  S.links.push({id:'l' + Date.now(), title, url:u, style:$('nStyle').value, icon:{mode:'auto', value:''}});
+  $('nTitle').value = ''; $('nUrl').value = '';
+  save(); render(); renderLinkMgr();
+};
+$('resetAll').onclick = ()=>{
+  if(confirm('Reset your whole page back to defaults?')){
+    S = JSON.parse(JSON.stringify(DEFAULTS));
+    save(); render(); syncForm();
+  }
+};
+
+/* ---- go ---- */
+render();
+</script>
+</body>
+</html>
