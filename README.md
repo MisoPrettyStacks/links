@@ -14,3 +14,7 @@ A pretty, popl-style link-in-bio page — fully editable right in the browser.
 Open `index.html`, tap **✏️ Edit page**, make it yours. That's it.
 
 Live: https://misoprettystacks.github.io/links/
+
+Made with 💖 by: @MisoPrettyStacks
+
+@IGotGlitterOnMe on X
