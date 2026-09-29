@@ -15,7 +15,7 @@
   html,body{margin:0;padding:0;}
   body{
     font-family:'Outfit',system-ui,-apple-system,sans-serif;
-    background:linear-gradient(180deg,var(--page1),var(--page2) 55%,var(--page3));
+    background:#ffffff;
     min-height:100vh; color:var(--ink);
     display:flex; justify-content:center;
     padding:26px 16px 110px; box-sizing:border-box;
@@ -54,25 +54,23 @@
   }
   .socBtn:hover{transform:translateY(-3px) scale(1.05);}
   .socBtn img{width:30px;height:30px;object-fit:contain;display:block;}
-  /* ---------- link cards ---------- */
-  #linkList{margin-top:2px;}
+  /* ---------- link tiles (large squares, label beneath) ---------- */
+  #linkList{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 12px;margin-top:4px;}
   #linkList:empty{display:none;}
-  .linkCard{
-    display:flex;align-items:center;gap:14px;background:#fff;border-radius:20px;
-    padding:11px 16px 11px 11px;margin:0 0 12px;text-decoration:none;color:var(--ink);
-    box-shadow:0 8px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.04);
-    text-align:left;transition:transform .15s;
+  .tile{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink);min-width:0;}
+  .tileBox{
+    width:100%;aspect-ratio:1/1;background:#fff;border:1px solid rgba(0,0,0,.07);
+    border-radius:26px;box-shadow:0 10px 22px rgba(0,0,0,.08);
+    display:flex;align-items:center;justify-content:center;transition:transform .15s;
   }
-  .linkCard:hover{transform:translateY(-2px);}
-  .linkIcon{
-    width:54px;height:54px;border-radius:17px;background:var(--accent-soft);flex:none;
-    display:flex;align-items:center;justify-content:center;font-size:29px;overflow:hidden;
+  .tile:hover .tileBox{transform:translateY(-3px);}
+  .tileBox .tIcon{font-size:52px;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .tileBox .tIcon img{width:58px;height:58px;object-fit:contain;display:block;}
+  .tileLabel{
+    margin-top:9px;font-size:13.5px;font-weight:600;text-align:center;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    max-width:100%;
   }
-  .linkIcon img{width:32px;height:32px;object-fit:contain;display:block;}
-  .linkText{flex:1;min-width:0;}
-  .linkTitle{font-weight:600;font-size:16.5px;line-height:1.3;}
-  .linkSub{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
-  .linkGo{color:var(--accent);font-size:22px;flex:none;opacity:.85;}
   #foot{margin-top:26px;color:var(--muted);font-size:12px;opacity:.8;}
   /* ---------- edit fab + sheet ---------- */
   #fab{
@@ -190,10 +188,10 @@
         <div class="fld" style="margin-bottom:9px"><label>Link title</label><input type="text" id="nTitle" placeholder="e.g. My Payhip shop"></div>
         <div class="fld" style="margin-bottom:9px"><label>URL</label><input type="url" id="nUrl" placeholder="https://…"></div>
         <div class="lmRow" style="margin-bottom:10px">
-          <select id="nStyle"><option value="card">Card style</option><option value="icon">Icon style</option></select>
+          <select id="nStyle"><option value="card">Tile style</option><option value="icon">Icon style</option></select>
         </div>
         <button class="btn primary" id="addLink" style="width:100%">＋ Add link</button>
-        <div class="hint">Icon style shows as a round button like your friend's. Card style shows as a full-width button. The icon is designed for you automatically ✨</div>
+        <div class="hint">Tile style shows as a large square with a short label beneath, like January's. Icon style shows as a round button. The icon is designed for you automatically ✨</div>
       </div>
     </div>
     <!-- THEME -->
@@ -342,14 +340,12 @@ function render(){
   const ll = $('linkList'); ll.innerHTML = '';
   S.links.filter(l => l.style !== 'icon').forEach(l => {
     const a = document.createElement('a');
-    a.className = 'linkCard'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
-    const ic = document.createElement('span'); ic.className = 'linkIcon'; setIcon(ic, l);
-    const tx = document.createElement('span'); tx.className = 'linkText';
-    const ti = document.createElement('div'); ti.className = 'linkTitle'; ti.textContent = l.title || hostOf(l.url);
-    const su = document.createElement('div'); su.className = 'linkSub'; su.textContent = hostOf(l.url);
-    tx.appendChild(ti); tx.appendChild(su);
-    const go = document.createElement('span'); go.className = 'linkGo'; go.textContent = '›';
-    a.appendChild(ic); a.appendChild(tx); a.appendChild(go);
+    a.className = 'tile'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; a.title = l.title;
+    const box = document.createElement('span'); box.className = 'tileBox';
+    const ic = document.createElement('span'); ic.className = 'tIcon'; setIcon(ic, l);
+    box.appendChild(ic);
+    const lb = document.createElement('span'); lb.className = 'tileLabel'; lb.textContent = l.title || hostOf(l.url);
+    a.appendChild(box); a.appendChild(lb);
     ll.appendChild(a);
   });
 }
@@ -421,7 +417,7 @@ function renderLinkMgr(){
     top.appendChild(prev); top.appendChild(tt);
     const row = document.createElement('div'); row.className = 'lmRow';
     const st = document.createElement('select');
-    st.innerHTML = '<option value="card">Card</option><option value="icon">Icon</option>';
+    st.innerHTML = '<option value="card">Tile</option><option value="icon">Icon</option>';
     st.value = l.style === 'icon' ? 'icon' : 'card';
     st.onchange = ()=>{ l.style = st.value; save(); render(); };
     const md = document.createElement('select');
